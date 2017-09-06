@@ -9,7 +9,7 @@
 # KeyModifiers: Command, Option, Control, Shift
 # SkipConfig: No
 # RunsSandboxed: No
-# Version: 1.3
+# Version: 1.0
 # MinDropzoneVersion: 3.5
 
 import os
@@ -66,8 +66,19 @@ def uploadFile(file_path, file_name):
     ret = bucket.put_object_from_file(remote_path + file_name, file_path)
     
     if ret.status == 200:
-        bucket_domain = os.environ.get('root_url', '')
+        root_url = os.environ.get('root_url', '')
+        bucket_domain = root_url.split(',')[0]
+        style = ''
+        try:
+          style = root_url.split(',')[1]
+        except Exception,e:
+          print e
+          pass
+        
+        print style
         base_url = 'http://%s/%s' % (bucket_domain, remote_path + file_name)
+        if style:
+          base_url += '?x-oss-process=style/' + style.strip()
 
         # copy file to local path as backup
 #        if 'remote_path' in os.environ:
