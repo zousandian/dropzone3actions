@@ -66,7 +66,7 @@ def uploadFile(file_path, file_name):
     ret = bucket.put_object_from_file(remote_path + file_name, file_path)
     
     if ret.status == 200:
-        root_url = os.environ.get('root_url', '')
+        root_url = os.environ.get('root_url', os.environ['server'])
         bucket_domain = root_url.split(',')[0]
         style = ''
         try:
